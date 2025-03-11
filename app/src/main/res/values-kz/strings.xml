@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Oyan</string>
+    <string name="welcome_text">OYAN-ға Қош келдіңіз!</string>
+    <string name="welcom_subset_text">Кітаптар мен жаңа идеялар әлемін ашыңыз</string>
+    <string name="get_started">Кеттік бастайық</string>
+    <string name="continue_with_google">Google арқылы жалғастыру</string>
+    <string name="continue_with_email">Email арқылы жалғастыру</string>
+    <string name="email_placeholder">Email немесе username</string>
+    <string name="password_placeholder">Құпия сөз</string>
+    <string name="forgot_password">Құпия сөзіңізді ұмыттыңызба?</string>
+    <string name="sign_in">Кіру</string>
+    <string name="need_account">Need an account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="username">Username</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="create_account">Create account</string>
+    <string name="info"><![CDATA[By signing up, you acknowledge that you have read and understood, and agree to OyanApp]]></string>
+    <string name="terms_of_policy">Terms of Service</string>
+    <string name="privaci_policy">Privacy Policy</string>
+    <string name="and">and</string>
+    <string name="continue_b">Continue</string>
+    <string name="email_sign">Email</string>
+    <string name="search_main">Search book or author</string>
+    <string name="search_genre">Search genres</string>
+    <string name="book">Book</string>
+    <string name="audio">Audio</string>
+</resources>
