@@ -14,6 +14,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun GenreScreen(
     genreViewModel: GenreViewModel = koinViewModel(),
+    onContinue : () -> Unit
 ){
     val genres by genreViewModel.filteredGenres.collectAsState()
     val selectedGenres by genreViewModel.selectedGenres.collectAsState()
@@ -34,6 +35,8 @@ fun GenreScreen(
         },
         onGenreSelected = {genre ->
             genreViewModel.toogleGenreSelected(genre)
-        }
+        },
+        onContinue = { genreViewModel.saveSelectedGenres { onContinue() } }
     )
+
 }

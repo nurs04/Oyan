@@ -43,15 +43,23 @@ android {
 
 dependencies {
 
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
     implementation ("com.google.accompanist:accompanist-flowlayout:0.31.1-alpha")
 
     implementation("io.insert-koin:koin-android:3.5.0") // Koin для Android
     implementation("io.insert-koin:koin-androidx-compose:3.5.0") // Для Jetpack Compose
     implementation("io.insert-koin:koin-core:3.5.0") // Core Koin
 
-    implementation(libs.hilt.android) //  Подключаем Hilt
+    implementation(libs.hilt.android)
     kapt(libs.hilt.compiler) // Hilt Compiler
     implementation(libs.hilt.navigation.compose)
+
+
+    implementation ("androidx.room:room-runtime:2.6.0")
+    kapt ("androidx.room:room-compiler:2.6.0")
+    implementation ("androidx.room:room-ktx:2.6.0")
 
     //Splash
     implementation("androidx.core:core-splashscreen:1.0.1")

@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Oyan"
 include(":app")
+include(":data")

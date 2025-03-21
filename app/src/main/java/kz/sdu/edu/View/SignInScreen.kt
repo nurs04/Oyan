@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,16 +40,20 @@ fun SignInScreen(
     val authState by authViewModel.authState.collectAsState()
 
 
-    LaunchedEffect(authState, hasClickedSignIn) {
+    LaunchedEffect(authState) {
         authState?.let { response ->
-            if (hasClickedSignIn && response.status == "success") {
-                genreViewModel.fetchGenres()
-                onSignIn()
-            } else if (response.status == "error") {
-                identifierError = "Invalid credentials"
-                passwordError = "Invalid credentials"
-            } else {
-                Log.e("SignIn", "Ошибка входа: ${response.status}")
+            when (response.status) {
+                "success" -> {
+                    genreViewModel.fetchGenres()
+                    onSignIn()
+                }
+                "error" -> {
+                    identifierError = "Invalid credentials"
+                    passwordError = "Invalid credentials"
+                }
+                else -> {
+                    Log.e("SignIn", "Ошибка входа: ${response.status}")
+                }
             }
         }
     }
@@ -60,7 +65,7 @@ fun SignInScreen(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null

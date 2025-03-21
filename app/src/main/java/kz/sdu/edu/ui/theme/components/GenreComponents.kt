@@ -1,6 +1,9 @@
 package kz.sdu.edu.ui.theme.components
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,9 +18,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -36,7 +41,8 @@ fun GenreComponents(
     selectedGenres : List<String>,
     searchQuery : String,
     onSearch : (String) -> Unit,
-    onGenreSelected : (String) -> Unit,
+    onGenreSelected : (Int) -> Unit,
+    onContinue : () -> Unit
 ) {
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -62,20 +68,20 @@ fun GenreComponents(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(genres) { genre ->
-                val isSelected = selectedGenres.contains(genre.genre)
+                val isSelected = selectedGenres.contains(genre.id.toString())
                 val isDisabled = selectedGenres.size >= 5 && !isSelected
                 GenreChip(
                     text = genre.genre,
                     isSelected = isSelected,
                     isDisabled = isDisabled,
-                    onClick = {onGenreSelected(genre.genre)}
+                    onClick = { onGenreSelected(genre.id) }
                 )
             }
         }
         Spacer(modifier = Modifier.weight(1f))
         ContinueButton(
             text = stringResource(R.string.continue_b),
-            onClicked = {  },
+            onClicked = onContinue,
             color = ButtonDefaults.buttonColors(
                 contentColor = Color.White,
                 containerColor = PrimaryViolet
@@ -85,37 +91,53 @@ fun GenreComponents(
     }
 }
 
-@Composable
-fun GenreChip(
-    text: String,
-    isSelected: Boolean,
-    isDisabled: Boolean,
-    onClick: () -> Unit
-) {
-    val backgroundColor = when {
-        isSelected -> PrimaryViolet
-        isDisabled -> Color.Black
-        else -> PrimaryVioletLight
-    }
-    val textColor = if (isSelected) Color.White else DarkText
-
-    Button(
-        onClick = onClick,
-        enabled = !isDisabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = backgroundColor,
-            contentColor = textColor,
-            disabledContainerColor = PrimaryVioletLight.copy(alpha = 0.5f),
-            disabledContentColor = DarkText.copy(alpha = 0.5f)
-        ),
-        shape = RoundedCornerShape(10.dp),
-        contentPadding = PaddingValues(vertical = 10.dp),
-        modifier = Modifier.fillMaxWidth()
+    @Composable
+    fun GenreChip(
+        text: String,
+        isSelected: Boolean,
+        isDisabled: Boolean,
+        onClick: () -> Unit
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium
-        )
+        val backgroundColor = when {
+            isSelected -> PrimaryViolet
+            isDisabled -> Color.Black
+            else -> PrimaryVioletLight
+        }
+        val textColor = if (isSelected) Color.White else DarkText
+
+        Button(
+            onClick = {
+                Log.d("GENRES_DEBUG", "Нажатие на жанр: $text")
+                onClick()
+                      },
+            enabled = !isDisabled,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = backgroundColor,
+                contentColor = textColor,
+                disabledContainerColor = PrimaryVioletLight.copy(alpha = 0.5f),
+                disabledContentColor = DarkText.copy(alpha = 0.5f)
+            ),
+            shape = RoundedCornerShape(10.dp),
+            contentPadding = PaddingValues(vertical = 10.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+
+
+@Composable
+fun FullScreenLoader() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.3f)),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = PrimaryViolet)
     }
 }

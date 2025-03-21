@@ -6,18 +6,17 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kz.sdu.edu.Util.Validator
 import kz.sdu.edu.models.AuthResponse
-import kz.sdu.edu.models.GenresResponse
+import kz.sdu.edu.network.NetworkResult
 import kz.sdu.edu.repository.AuthRepository
+import kz.sdu.edu.repository.AuthRepositoryImpl
 
 class AuthViewModel(
-    private val repository: AuthRepository
+    val repository: AuthRepository
 ) : ViewModel() {
     private val _authState = MutableStateFlow<AuthResponse?>(null)
     val authState: StateFlow<AuthResponse?> = _authState.asStateFlow()
@@ -29,12 +28,17 @@ class AuthViewModel(
         password2: String,
     ) {
         viewModelScope.launch {
-        try {
-            val response = repository.register(username, email, password1, password2)
-            _authState.value = response
-            response!!
-        }catch (e : Exception){
-            Log.e("REGISTER", "Ошибка при регистрации", e)
+            when (val result = repository.register(username, email, password1, password2)) {
+                is NetworkResult.Success -> {
+                    val authResponse = result.data
+                    _authState.value = authResponse
+                    if (authResponse.status == "success") {
+                        repository.setLoggedIn(true)
+                    }
+                }
+                is NetworkResult.Error -> {
+                    Log.e("REGISTER", "Registration failed: ${result.message}")
+                }
             }
         }
     }
@@ -43,11 +47,27 @@ class AuthViewModel(
         password: String,
     ) {
         viewModelScope.launch {
-            try {
-                val response = repository.login(identifier, password)
-                _authState.value = response
-            }catch (e : Exception){
-                Log.e("LOGIN", "Ошибка входа", e)
+            if (repository.getCsrfToken().isNullOrEmpty()) {
+                when(val csrfResult = repository.fetchCsrfToken()) {
+                    is NetworkResult.Success -> Unit
+                    is NetworkResult.Error -> {
+                        Log.e("LOGIN", "CSRF token fetch failed: ${csrfResult.message}")
+                        return@launch
+                    }
+                }
+            }
+            when (val result = repository.login(identifier, password)) {
+                is NetworkResult.Success -> {
+                    val authResponse = result.data
+                    _authState.value = authResponse
+                    if (authResponse.status == "success") {
+                        repository.setLoggedIn(true)
+                        repository.setGenresSelected(authResponse.preferred_genres)
+                    }
+                }
+                is NetworkResult.Error -> {
+                    Log.e("LOGIN", "Login failed: ${result.message}")
+                }
             }
         }
     }
@@ -57,5 +77,10 @@ class AuthViewModel(
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+    fun logout(){
+        viewModelScope.launch {
+            repository.logout()
+        }
+    }
 
 }

@@ -25,4 +25,21 @@
     <string name="search_genre">Search genres</string>
     <string name="book">Book</string>
     <string name="audio">Audio</string>
+    <string name="recomendation">Recomendation</string>
+    <string name="see_all">See all</string>
+    <string name="popular_books">Popular books</string>
+    <string name="new_books">New books</string>
+    <string name="daily">Daily excerpt</string>
+    <string name="compt">Competitions</string>
+    <string name="hit">New hits</string>
+    <string name="pages">Pages</string>
+    <string name="reading">Reading</string>
+    <string name="book_marks">Bookmarks</string>
+    <string name="rating">Rating</string>
+    <string name="ovrview">Overview</string>
+    <string name="comments">Comments</string>
+    <string name="about_book">About book</string>
+    <string name="read_book">Read book</string>
+    <string name="see_more">See more</string>
+    <string name="see_less">See less</string>
 </resources>

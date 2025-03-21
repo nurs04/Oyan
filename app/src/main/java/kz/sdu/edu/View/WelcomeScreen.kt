@@ -84,7 +84,6 @@ fun WelcomeScreen(
         SignBottomSheet(
             onDismiss = { showBottomSheet = false },
             onNavigateSignIn = {
-                showBottomSheet = false
                 navController.navigate("genres") {
                     popUpTo("welcome") { inclusive = true }
                 }

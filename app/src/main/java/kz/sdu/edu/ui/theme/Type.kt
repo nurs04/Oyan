@@ -59,7 +59,6 @@ val CustomTypography = Typography(
     ),
     titleSmall = TextStyle(
         fontFamily = OpenSans,
-        fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 22.sp,
         letterSpacing = 0.1.sp
